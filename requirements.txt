@@ -1,12 +1,13 @@
 #Basic
 pandas
-os
+pillow
 
 #Model
 transformers
 
 #Gcloud
-google.cloud
+google
+google-cloud-bigquery
 
 
 #API

@@ -1,7 +1,8 @@
 import pandas as pd
 from transformers import pipeline
 from google.cloud import bigquery
-
+from google.oauth2 import service_account
+from params import *
 
 def get_food (image):
     model = pipeline("image-classification", model="nateraw/food")
@@ -13,13 +14,13 @@ def get_carbs (food_result):
 
     query = f"""
         SELECT Data_Carbohydrate, Data_Household_Weights_1st_Household_Weight,Data_Household_Weights_1st_Household_Weight_Description
-        FROM `{GCP_PROJECT}.nutrition_table.main`
+        FROM `cogent-sign-411316.nutrition_table.main`
         WHERE Category = '{food_result}'
     """
-    client = bigquery.Client(project=GCP_PROJECT)
+
+    client = bigquery.Client(project='cogent-sign-411316')
     query_job = client.query(query)
     query_result = query_job.result()
-    print(query_result)
     df = query_result.to_dataframe()
     carbs_result = df['Data_Carbohydrate'].mean()
     return carbs_result
@@ -36,3 +37,4 @@ def get_full_result (image):
 
 
 if __name__ == '__main__':
+    print(get_food('image33.jpeg'))
