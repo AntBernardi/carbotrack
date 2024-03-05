@@ -33,3 +33,6 @@ def get_full_result (image):
     carbs_result = get_carbs(food_result)
     insuline_result = get_insuline(carbs_result)
     return food_result,carbs_result,insuline_result
+
+
+if __name__ == '__main__':
