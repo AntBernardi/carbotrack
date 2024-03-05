@@ -1,3 +1,14 @@
+#Basic
 pandas
+os
+
+#Model
 transformers
+
+#Gcloud
 google.cloud
+
+
+#API
+fastapi
+uvicorn
