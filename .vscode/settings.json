@@ -1,0 +1,6 @@
+{
+    "python.analysis.extraPaths": [
+        "./carbotrack_api/carbotrack/interface",
+        "./carbotrack_api"
+    ]
+}

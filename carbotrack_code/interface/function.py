@@ -1,6 +1,7 @@
 import pandas as pd
 from transformers import pipeline
 from google.cloud import bigquery
+from carbotrack_code.params import *
 
 
 def get_food (image):
@@ -36,3 +37,4 @@ def get_full_result (image):
 
 
 if __name__ == '__main__':
+    pass
