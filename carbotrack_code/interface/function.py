@@ -1,8 +1,7 @@
 import pandas as pd
 from transformers import pipeline
 from google.cloud import bigquery
-from google.oauth2 import service_account
-from params import *
+from carbotrack_code.params import *
 
 def get_food (image):
     model = pipeline("image-classification", model="nateraw/food")
@@ -37,4 +36,5 @@ def get_full_result (image):
 
 
 if __name__ == '__main__':
-    print(get_food('image33.jpeg'))
+
+    pass

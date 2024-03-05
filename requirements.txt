@@ -1,12 +1,10 @@
 #Basic
 pandas
-pillow
-
 #Model
 transformers
 
 #Gcloud
-google
+google-cloud
 google-cloud-bigquery
 
 
