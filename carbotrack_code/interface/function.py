@@ -15,6 +15,12 @@ client = bigquery.Client.from_service_account_json(key_path)
 
 def get_food(image: Image.Image):
     model = pipeline("image-classification", model="nateraw/food", framework="pt")
+
+
+
+def get_food (image):
+    model = pipeline("image-classification", model="nateraw/food")
+
     predict = model.predict(image)
     food_result = predict[0]['label'].upper()
     return food_result
@@ -65,6 +71,17 @@ def create_response(image_bytes):
         'insuline_result': insuline_result
     }
     return safe_json(data)
+
+def get_insuline (carbs_result):
+    insuline_result = round(carbs_result/15)
+    return insuline_result
+
+def get_full_result (image):
+    food_result = get_food(image)
+    carbs_result = get_carbs(food_result)
+    insuline_result = get_insuline(carbs_result)
+    return food_result,carbs_result,insuline_result
+
 
 if __name__ == '__main__':
     pass

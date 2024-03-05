@@ -2,6 +2,7 @@ import sys
 import os
 import uuid
 
+
 # Get the directory of the current file
 current_dir = os.path.dirname(os.path.realpath(__file__))
 
@@ -10,6 +11,7 @@ parent_dir = os.path.dirname(current_dir)
 
 # Add the parent directory to sys.path
 sys.path.insert(0, parent_dir)
+
 
 from fastapi import FastAPI, UploadFile
 from fastapi.param_functions import File
@@ -20,6 +22,8 @@ from fastapi.staticfiles import StaticFiles
 from PIL import Image
 import io
 import json
+from fastapi import FastAPI
+from carbotrack_code.interface.function import get_full_result
 
 
 app = FastAPI()
@@ -115,6 +119,14 @@ async def predict(image: UploadFile = File(...)):
         return JSONResponse(status_code=200, content=response_json)
     except Exception as e:
         return JSONResponse(status_code=500, content={"error": f"An error occurred: {e}"})
+
+@app.get('/predict')
+def predict(image):
+    food_result,carbs_result,insuline_result = get_full_result(image)
+    return {'You are eating': food_result,
+            'Carbs quantity': carbs_result,
+            'Insuline doses recommended': insuline_result}
+
 
 @app.get('/dummy_test')
 def dummy(int: int):
