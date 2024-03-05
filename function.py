@@ -3,7 +3,6 @@ from transformers import pipeline
 from google.cloud import bigquery
 
 
-
 def get_food (image):
     model = pipeline("image-classification", model="nateraw/food")
     predict = model.predict(image)
@@ -12,11 +11,9 @@ def get_food (image):
 
 def get_carbs (food_result):
 
-    GCP_PROJECT= 'cogent-sign-411316'
-
     query = f"""
         SELECT Data_Carbohydrate, Data_Household_Weights_1st_Household_Weight,Data_Household_Weights_1st_Household_Weight_Description
-        FROM `cogent-sign-411316.nutrition_table.main`
+        FROM `{GCP_PROJECT}.nutrition_table.main`
         WHERE Category = '{food_result}'
     """
     client = bigquery.Client(project=GCP_PROJECT)
