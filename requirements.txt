@@ -1,13 +1,12 @@
 #Basic
 pandas
-os
 
 #Model
 transformers
 
 #Gcloud
-google.cloud
-
+google-cloud
+google-cloud-bigquery
 
 #API
 fastapi
