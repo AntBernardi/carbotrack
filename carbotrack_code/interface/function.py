@@ -1,7 +1,7 @@
 import pandas as pd
 from transformers import pipeline
 from google.cloud import bigquery
-from carbotrack_code.params import GCP_PROJECT
+from params import GCP_PROJECT
 from PIL import Image
 import io
 import os
@@ -16,12 +16,6 @@ client = bigquery.Client.from_service_account_json(key_path)
 
 def get_food(image: Image.Image):
     model = pipeline("image-classification", model="nateraw/food", framework="pt")
-
-
-
-def get_food (image):
-    model = pipeline("image-classification", model="nateraw/food")
-
     predict = model.predict(image)
     food_result = predict[0]['label'].upper()
     return food_result
