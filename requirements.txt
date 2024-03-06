@@ -2,6 +2,7 @@
 pandas
 numpy
 
+
 #Model
 transformers
 torch
@@ -9,7 +10,9 @@ torch
 #Gcloud
 google-cloud
 google-cloud-bigquery
+
 db-dtypes
+
 
 #API
 fastapi
