@@ -1,7 +1,6 @@
 #Basic
 pandas
 numpy
-json
 
 #Model
 transformers
