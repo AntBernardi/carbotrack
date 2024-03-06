@@ -8,10 +8,10 @@ import json
 import numpy as np
 
 # Get the path of the JSON key file from the environment variable
-key_path = os.getenv("GOOGLE_APPLICATION_CREDENTIALS")
+#key_path = os.getenv("GOOGLE_APPLICATION_CREDENTIALS")
 
 # Use the key file to authenticate
-client = bigquery.Client.from_service_account_json(key_path)
+#client = bigquery.Client.from_service_account_json(key_path)
 
 def get_food(image: Image.Image):
     model = pipeline("image-classification", model="nateraw/food", framework="pt")
@@ -27,17 +27,20 @@ def get_food (image):
 
 def get_carbs (food_result):
 
-    query = f"""
-        SELECT Data_Carbohydrate, Data_Household_Weights_1st_Household_Weight,Data_Household_Weights_1st_Household_Weight_Description
-        FROM `{GCP_PROJECT}.nutrition_table.main`
-        WHERE Category = '{food_result}'
-    """
-    client = bigquery.Client(project=GCP_PROJECT)
-    query_job = client.query(query)
-    query_result = query_job.result()
-    print(query_result)
-    df = query_result.to_dataframe()
-    carbs_result = df['Data_Carbohydrate'].mean()
+    df = pd.read_csv('raw_data/food1.csv')
+    # query = f"""
+    #     SELECT Data_Carbohydrate, Data_Household_Weights_1st_Household_Weight,Data_Household_Weights_1st_Household_Weight_Description
+    #     FROM `{GCP_PROJECT}.nutrition_table.main`
+    #     WHERE Category = '{food_result}'
+    # """
+    # client = bigquery.Client(project=GCP_PROJECT)
+    # query_job = client.query(query)
+    # query_result = query_job.result()
+    # print(query_result)
+    # df = query_result.to_dataframe()
+    mask = df['Category'] == food_result
+    df_result = df[mask]
+    carbs_result = df_result['Data.Carbohydrate'].mean()
     return carbs_result
 
 def get_insuline(carbs_result):
@@ -84,4 +87,4 @@ def get_full_result (image):
 
 
 if __name__ == '__main__':
-    pass
+    get_carbs('PIZZA')

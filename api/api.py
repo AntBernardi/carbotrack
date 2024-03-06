@@ -34,16 +34,16 @@ def index():
     return {'Hello': 'You'}
 
 # Serve files from the /images directory at the /images URL
-app.mount("/images", StaticFiles(directory="images"), name="images")
+app.mount("/images", StaticFiles(directory="api/images"), name="images")
 
 @app.post('/first_step')
 async def first_step(image: UploadFile = File(...)):
     try:
         if not image.content_type.startswith("image/"):
             return JSONResponse(status_code=400, content={"error": "Invalid file type"})
-        
+
         filename = f"{uuid.uuid4()}.jpg"
-        image_path = f'images/{filename}'
+        image_path = f'api/images/{filename}'
 
         with open(image_path, 'wb') as buffer:
             contents = await image.read()
@@ -60,9 +60,9 @@ async def get_carbs_endpoint(image: UploadFile = File(...)):
     try:
         if not image.content_type.startswith("image/"):
             return JSONResponse(status_code=400, content={"error": "Invalid file type"})
-        
+
         filename = f"{uuid.uuid4()}.jpg"
-        image_path = f'images/{filename}'
+        image_path = f'api/images/{filename}'
         with open(image_path, 'wb') as buffer:
             contents = await image.read()
             buffer.write(contents)
@@ -120,12 +120,12 @@ async def predict(image: UploadFile = File(...)):
     except Exception as e:
         return JSONResponse(status_code=500, content={"error": f"An error occurred: {e}"})
 
-@app.get('/predict')
-def predict(image):
-    food_result,carbs_result,insuline_result = get_full_result(image)
-    return {'You are eating': food_result,
-            'Carbs quantity': carbs_result,
-            'Insuline doses recommended': insuline_result}
+# @app.get('/predict')
+# def predict(image):
+#     food_result,carbs_result,insuline_result = get_full_result(image)
+#     return {'You are eating': food_result,
+#             'Carbs quantity': carbs_result,
+#             'Insuline doses recommended': insuline_result}
 
 
 @app.get('/dummy_test')
@@ -133,4 +133,4 @@ def dummy(int: int):
     if int == 1:
         return {'One'}
     else:
-        return {'Please input 1 as parameter'}    
+        return {'Please input 1 as parameter'}

@@ -1,8 +1,6 @@
 #Basic
 pandas
 numpy
-json
-
 
 #Model
 transformers
@@ -11,11 +9,13 @@ torch
 #Gcloud
 google-cloud
 google-cloud-bigquery
-
 db-dtypes
-
 
 #API
 fastapi
 uvicorn
 python-multipart
+pillow
+
+#streamlit
+streamlit
