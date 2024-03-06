@@ -3,9 +3,10 @@ import numpy as np
 import pandas as pd
 from transformers import pipeline
 from google.cloud import bigquery
-from carbotrack_code.params import *
+from carbotrack_code.params import GCP_PROJECT
 from PIL import Image
 import io
+import os
 
 # Get the path of the JSON key file from the environment variable
 key_path = os.getenv("GOOGLE_APPLICATION_CREDENTIALS")
