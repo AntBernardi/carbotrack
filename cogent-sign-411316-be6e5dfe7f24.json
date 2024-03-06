@@ -1,0 +1,13 @@
+{
+  "type": "service_account",
+  "project_id": "cogent-sign-411316",
+  "private_key_id": "be6e5dfe7f24ae9acaacd76909ef0f3baf73fbaa",
+  "private_key": "-----BEGIN PRIVATE KEY-----\nMIIEvQIBADANBgkqhkiG9w0BAQEFAASCBKcwggSjAgEAAoIBAQCoXSPd6HcC3eMt\ns47r8d14Ji3Yrk5gQG2yCX9o0jV7Klt3g2JWgTpZs8vHNyzBT854SjkR8Hm+tT1f\njDIEWC8dcaaavhxA3bMTvlxmRIK3n7rd4u8R1Ua3QZyUuiZy14DFEUxPrNngb1zc\ncQCo8j7Wd1u4cHw3oK6sWzxGNUW+zBS+B4zeMztAEV/m2JyuHvxM42iZOTXNYifM\nzm3y0XH0wbYQf0VGQW/8/PSaAFpL+YrexLxn65qRg4tb/puST1bt6/c6YJce+MIE\npF6bnr3jMxLz8g9fDwv7Fe6urcy80LQUO+Xp8rVVhiaPx6ZY14MQe5U7dWysOUNA\nBJXmTFidAgMBAAECggEADadqEHsjuwg0KOwU3+vVnm1tjpL07meN4zWpJHQscVXk\nz5Xd4dk+mnDon+TIsiUO//XjAs0EuT45C+M9Li7Zo/1oJHNdAWIJaG/pze2/R8rX\ngdr/hkEh6EbqVCx0OvWLrvphZ4fDg/5RYrDzu6p+WpsY8DsHyTofLawDgMfIECTv\nxWcrasE2pVWs+zHaDRTHqDGVwLb0aI0EndceuEnYQmUhfC994i3nw+SOKVPoxGn/\nfS7g4ZrlRiFhMZ1Cr+Evo0LQ3SCcTMsmWIB1vM2AvNhYIv30umZ9XtonCMne1xY2\nSxnrwbRRguCct1zIeSnhPPSIMqfwwI7Vpf46P/IkwQKBgQDqh+T2GxmE0WzlVCOa\nDm45ZgV4nmFeuwxsXjsRL/FoqEp4Bdd5GishrhpOri9lXOVrCa5IX61EeYlhF+J3\nSbP+CoBjGO8C9CM0MbZVBGUqeik8xkHOjX45ezhxszE21pGbhi9bOrhgMcbQzYGB\nhBN+JKfzRxRnA28JsBTEgSXkXQKBgQC3xqgx5b7ti1BmvBslqwOA7WG/RO7ZhAsG\nsdMSSt+oHp7pwFocJvWl1QJUt+bNvCqDqhbvklO4TrwjrPM87xudAZEJujl26TCf\nLTT3hxoIcA4CBpbKa7EENOrS3qnoahVNJTuWRkUTSGdwYUmA3AWVFDN+B47/TSxk\n2RZcAF0BQQKBgEIgGrBBJ8rI+XkXZgpTs0Q/vZ8qmK2K84/CackIyXoGqSh6DSy5\n8htG6WfxuK9Np+msCxWg1EuQMOnNQC79+t/Pui82on0ktKBMu+nwmU2GsAXQqFFC\nl6pBUcLNET0y9k7xYHzKa53DqxjIOJF52b0hPLFdAyWgVDhZCyH0f+iJAoGBALEg\nmfAt3c4aXo4Gc6vknmXfZjzx9bxUlkQHlMamv9bMXKIzsSY9Lrp9CdgZwC0/VUK9\n54lU4bhcut0vzulGFLlJTz+u67/+lcx1x/1ji+XiCr5NF31WOrExR7uivOSzioBm\niH4YkG87c+dO/YdjiUXcyJyKMHtFKKqyyeg2uW2BAoGAcM5Ej016m1jUrVOdseoC\nE5rBpC1aR5pCnVCePA4Z4hShpu30qyxY0hQaJ+n9L64wCrOnfMR9Yuo8fSfT8bDW\nVCO4lUWv+pwrgxx9Qd8Jz9zRkB75ZiowF/K8tm1+2sP27VwhWDJCehia4JvUYUO0\nOSVJ3LjtcFm8P2TuO13k9DM=\n-----END PRIVATE KEY-----\n",
+  "client_email": "api-carbotrack-local@cogent-sign-411316.iam.gserviceaccount.com",
+  "client_id": "111662532666782121285",
+  "auth_uri": "https://accounts.google.com/o/oauth2/auth",
+  "token_uri": "https://oauth2.googleapis.com/token",
+  "auth_provider_x509_cert_url": "https://www.googleapis.com/oauth2/v1/certs",
+  "client_x509_cert_url": "https://www.googleapis.com/robot/v1/metadata/x509/api-carbotrack-local%40cogent-sign-411316.iam.gserviceaccount.com",
+  "universe_domain": "googleapis.com"
+}
