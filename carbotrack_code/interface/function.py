@@ -2,12 +2,14 @@ import pandas as pd
 from transformers import pipeline
 from google.cloud import bigquery
 from carbotrack_code.params import GCP_PROJECT
+
 from PIL import Image
 import io
 import os
 import json
 import numpy as np
 import requests
+
 
 def get_food (model,image):
 
