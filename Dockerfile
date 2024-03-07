@@ -2,6 +2,7 @@ FROM bitnami/pytorch
 
 # Set environment variable
 ENV PROTOCOL_BUFFERS_PYTHON_IMPLEMENTATION=python
+ENV TRANSFORMERS_CACHE=/tmp/transformers_cache
 
 WORKDIR /prod
 
