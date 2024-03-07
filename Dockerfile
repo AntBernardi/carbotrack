@@ -4,7 +4,6 @@ FROM bitnami/pytorch
 ENV PROTOCOL_BUFFERS_PYTHON_IMPLEMENTATION=python
 ENV TRANSFORMERS_CACHE=/tmp/transformers_cache
 
-
 # Set working directory
 WORKDIR /app
 

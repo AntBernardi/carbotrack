@@ -2,6 +2,7 @@ import pandas as pd
 from transformers import pipeline
 from google.cloud import bigquery
 from carbotrack_code.params import GCP_PROJECT
+
 from PIL import Image
 import io
 import os
@@ -10,7 +11,6 @@ import numpy as np
 
 def get_food (image):
     model = pipeline("image-classification", model="nateraw/food",framework="pt")
-
     predict = model.predict(image)
     food_result = predict[0]['label'].upper()
     return food_result
