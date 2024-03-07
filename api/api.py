@@ -24,6 +24,9 @@ import io
 import json
 from fastapi import FastAPI
 from carbotrack_code.interface.function import get_full_result
+from transformers import pipeline
+
+model = pipeline("image-classification", model="nateraw/food",framework="pt")
 
 
 app = FastAPI()
@@ -49,7 +52,7 @@ async def first_step(image: UploadFile = File(...)):
             contents = await image.read()
             buffer.write(contents)
 
-        food_result = get_food(image_path)
+        food_result = get_food(model,image_path)
 
         # Supprimez l'image après avoir terminé le traitement
         if os.path.exists(image_path):
@@ -71,8 +74,8 @@ async def get_carbs_endpoint(image: UploadFile = File(...)):
         with open(image_path, 'wb') as buffer:
             contents = await image.read()
             buffer.write(contents)
-        food_result = get_food(image_path)
-        carbs_result = get_carbs(food_result)
+        food_result = get_food(model,image_path)
+        carbs_result = get_carbs(food_result,image_path)
         return {
             'You are eating': food_result,
             'Carbohydrate content': carbs_result
@@ -92,8 +95,18 @@ async def get_carbs_endpoint(food_result: str):
 @app.post('/predict')
 async def predict(image: UploadFile = File(...)):
     try:
-        contents = await image.read()
-        response = create_response(contents)
+
+        if not image.content_type.startswith("image/"):
+            return JSONResponse(status_code=400, content={"error": "Invalid file type"})
+
+        filename = f"{uuid.uuid4()}.jpg"
+        image_path = filename
+
+        with open(image_path, 'wb') as buffer:
+            contents = await image.read()
+            buffer.write(contents)
+
+        response = create_response(model,image_path)
         response_json = json.loads(response)
 
         # Truncate or limit the size of the response
