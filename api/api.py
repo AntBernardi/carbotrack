@@ -120,12 +120,12 @@ async def predict(image: UploadFile = File(...)):
     except Exception as e:
         return JSONResponse(status_code=500, content={"error": f"An error occurred: {e}"})
 
-@app.get('/predict')
-def predict(image):
-    food_result,carbs_result,insuline_result = get_full_result(image)
-    return {'You are eating': food_result,
-            'Carbs quantity': carbs_result,
-            'Insuline doses recommended': insuline_result}
+# @app.get('/predict')
+# def predict(image):
+#     food_result,carbs_result,insuline_result = get_full_result(image)
+#     return {'You are eating': food_result,
+#             'Carbs quantity': carbs_result,
+#             'Insuline doses recommended': insuline_result}
 
 
 @app.get('/dummy_test')
