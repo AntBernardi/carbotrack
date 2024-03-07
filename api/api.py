@@ -34,7 +34,7 @@ def index():
     return {'Hello': 'You'}
 
 # Serve files from the /images directory at the /images URL
-app.mount("/images", StaticFiles(directory="api/images"), name="images")
+#app.mount("/images", StaticFiles(directory="images"), name="images")
 
 @app.post('/first_step')
 async def first_step(image: UploadFile = File(...)):
@@ -43,13 +43,17 @@ async def first_step(image: UploadFile = File(...)):
             return JSONResponse(status_code=400, content={"error": "Invalid file type"})
 
         filename = f"{uuid.uuid4()}.jpg"
-        image_path = f'api/images/{filename}'
+        image_path = filename
 
         with open(image_path, 'wb') as buffer:
             contents = await image.read()
             buffer.write(contents)
 
         food_result = get_food(image_path)
+
+        # Supprimez l'image après avoir terminé le traitement
+        if os.path.exists(image_path):
+            os.remove(image_path)
 
         return {'You are eating': food_result}
     except Exception as e:
@@ -62,7 +66,8 @@ async def get_carbs_endpoint(image: UploadFile = File(...)):
             return JSONResponse(status_code=400, content={"error": "Invalid file type"})
 
         filename = f"{uuid.uuid4()}.jpg"
-        image_path = f'api/images/{filename}'
+        image_path = filename
+
         with open(image_path, 'wb') as buffer:
             contents = await image.read()
             buffer.write(contents)
@@ -83,27 +88,6 @@ async def get_carbs_endpoint(food_result: str):
         'Carbohydrate content': carbs_result
     }
 
-# @app.post('/predict')
-# async def predict(image: UploadFile = File(...)):
-#     try:
-#         contents = await image.read()
-#         food_result, carbs_result, insuline_result = get_full_result(contents)
-#         return {
-#             'You are eating': food_result,
-#             'Carbs quantity': carbs_result,
-#             'Insuline doses recommended': insuline_result
-#         }
-#     except Exception as e:
-#         return JSONResponse(status_code=500, content={"error": f"An error occurred: {e}"})
-
-# @app.post('/predict')
-# async def predict(image: UploadFile = File(...)):
-#     try:
-#         contents = await image.read()
-#         response = create_response(contents)
-#         return JSONResponse(status_code=200, content=json.loads(response))
-#     except Exception as e:
-#         return JSONResponse(status_code=500, content={"error": f"An error occurred: {e}"})
 
 @app.post('/predict')
 async def predict(image: UploadFile = File(...)):
@@ -119,13 +103,6 @@ async def predict(image: UploadFile = File(...)):
         return JSONResponse(status_code=200, content=response_json)
     except Exception as e:
         return JSONResponse(status_code=500, content={"error": f"An error occurred: {e}"})
-
-# @app.get('/predict')
-# def predict(image):
-#     food_result,carbs_result,insuline_result = get_full_result(image)
-#     return {'You are eating': food_result,
-#             'Carbs quantity': carbs_result,
-#             'Insuline doses recommended': insuline_result}
 
 
 @app.get('/dummy_test')
