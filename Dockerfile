@@ -17,7 +17,7 @@ COPY carbotrack_code carbotrack_code
 COPY api api
 COPY setup.py /setup.py
 RUN pip install --upgrade pip
-
+RUN direnv allow
 # We already have a make command for that!
 COPY Makefile /Makefile
 
