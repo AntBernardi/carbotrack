@@ -22,9 +22,6 @@ def get_carbs (food_result):
         # Spoonacular API endpoint
     url = 'https://api.spoonacular.com/recipes/guessNutrition'
 
-    # Your Spoonacular API key
-    api_key = 'your_api_key'
-
     # Parameters for the GET request
     params = {
         'title': food_result,
