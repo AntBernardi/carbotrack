@@ -1,14 +1,11 @@
 import pandas as pd
-from transformers import pipeline
-from google.cloud import bigquery
-from carbotrack_code.params import GCP_PROJECT
-
 from PIL import Image
 import io
 import os
 import json
 import numpy as np
 import requests
+from dotenv import load_dotenv
 
 
 def get_food (model,image):
@@ -17,42 +14,66 @@ def get_food (model,image):
     food_result = predict[0]['label'].upper()
     return food_result
 
+def get_carbs (food_result):
+    
+    load_dotenv()
+    api_key = os.getenv('SPOON_API_KEY')
 
+        # Spoonacular API endpoint
+    url = 'https://api.spoonacular.com/recipes/guessNutrition'
 
-def get_carbs (food_result, image_path):
+    # Your Spoonacular API key
+    api_key = 'your_api_key'
 
-    #request API volume
-    url = 'https://food-weight-estimation-4xnsxy3ska-od.a.run.app/predict'
-    params = {'food_type': food_result, 'plate_diameter': '0'}
-
-    files = {'image': ('image24.jpeg', open(image_path, 'rb'), 'image/jpeg')}
-    headers = {
-        'accept': 'application/json',
+    # Parameters for the GET request
+    params = {
+        'title': food_result,
+        'apiKey': api_key
     }
-    response = requests.post(url, params=params, files=files, headers=headers)
-    result_volume = round(response.json()['weight'],2)
 
-    # read data from database
-    df = pd.read_csv('raw_data/food1.csv')
-    mask = df['Category'] == food_result
-    df_result = df[mask]
+    # Make the GET request
+    response = requests.get(url, params=params)
 
-    # Define the condition
-    condition = df_result['Data.Household Weights.1st Household Weight Description'] == '1 serving'
+    # Parse the JSON response
+    data = response.json()
 
-    # Apply the condition using boolean indexing to filter rows where the condition is True
-    filtered_rows = df_result.loc[condition]
+    # Get the amount of carbs
+    carbs = data['carbs']['value']
 
-    # If any rows satisfy the condition, return the value from the 'Data.Household Weights.1st Household Weight' column
-    if not filtered_rows.empty:
-        df_value = filtered_rows[['Data.Carbohydrate','Data.Household Weights.1st Household Weight']].iloc[0]
+    return carbs
 
-    else:
-        df_value = df_result[['Data.Carbohydrate', 'Data.Household Weights.1st Household Weight']].mean()
+    # #request API volume
+    # url = 'https://food-weight-estimation-4xnsxy3ska-od.a.run.app/predict'
+    # params = {'food_type': food_result, 'plate_diameter': '0'}
 
-    carbs_result = round((result_volume * df_value['Data.Carbohydrate'])/df_value['Data.Household Weights.1st Household Weight'],2)
+    # files = {'image': ('image24.jpeg', open(image_path, 'rb'), 'image/jpeg')}
+    # headers = {
+    #     'accept': 'application/json',
+    # }
+    # response = requests.post(url, params=params, files=files, headers=headers)
+    # result_volume = round(response.json()['weight'],2)
 
-    return carbs_result
+    # # read data from database
+    # df = pd.read_csv('raw_data/food1.csv')
+    # mask = df['Category'] == food_result
+    # df_result = df[mask]
+
+    # # Define the condition
+    # condition = df_result['Data.Household Weights.1st Household Weight Description'] == '1 serving'
+
+    # # Apply the condition using boolean indexing to filter rows where the condition is True
+    # filtered_rows = df_result.loc[condition]
+
+    # # If any rows satisfy the condition, return the value from the 'Data.Household Weights.1st Household Weight' column
+    # if not filtered_rows.empty:
+    #     df_value = filtered_rows[['Data.Carbohydrate','Data.Household Weights.1st Household Weight']].iloc[0]
+
+    # else:
+    #     df_value = df_result[['Data.Carbohydrate', 'Data.Household Weights.1st Household Weight']].mean()
+
+    # carbs_result = round((result_volume * df_value['Data.Carbohydrate'])/df_value['Data.Household Weights.1st Household Weight'],2)
+
+    # return carbs_result
 
 def get_insuline(carbs_result):
     if pd.isnull(carbs_result):

@@ -16,6 +16,7 @@ fastapi
 uvicorn
 python-multipart
 pillow
+python-dotenv
 
 #streamlit
 streamlit
