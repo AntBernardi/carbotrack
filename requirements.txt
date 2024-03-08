@@ -18,4 +18,9 @@ python-multipart
 pillow
 
 #streamlit
+<<<<<<< HEAD
 streamlit
+=======
+streamlit
+
+>>>>>>> 69aed12d50a17d68405dd7c107b7b2a09642ff03
