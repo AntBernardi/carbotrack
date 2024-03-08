@@ -76,7 +76,7 @@ def get_insuline(carbs_result):
     if pd.isnull(carbs_result):
         return None
     else:
-        return round(carbs_result / 6)
+        return round(carbs_result / 8)
 
 
 def safe_json(data):
