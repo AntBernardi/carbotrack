@@ -21,4 +21,4 @@ RUN pip install --upgrade pip
 # We already have a make command for that!
 COPY Makefile /Makefile
 
-CMD uvicorn api.api:app --host 0.0.0.0 --port ${PORT:-7777}
+CMD uvicorn api.api:app --host 0.0.0.0 
