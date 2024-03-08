@@ -5,7 +5,7 @@ import os
 import json
 import numpy as np
 import requests
-from dotenv import load_dotenv
+#from dotenv import load_dotenv
 
 
 def get_food (model,image):
@@ -16,7 +16,7 @@ def get_food (model,image):
 
 def get_carbs (food_result):
     
-    load_dotenv()
+    #load_dotenv()
     api_key = os.getenv('SPOON_API_KEY')
 
         # Spoonacular API endpoint
