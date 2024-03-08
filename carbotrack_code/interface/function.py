@@ -76,7 +76,7 @@ def get_insuline(carbs_result):
     if pd.isnull(carbs_result):
         return None
     else:
-        return round(carbs_result / 15)
+        return round(carbs_result / 6)
 
 
 def safe_json(data):
@@ -91,7 +91,7 @@ def safe_json(data):
 
 def get_full_result(model,image_bytes):
     food_result = get_food(model,image_bytes)
-    carbs_result = get_carbs(food_result,image_bytes)
+    carbs_result = get_carbs(food_result)
     insuline_result = get_insuline(carbs_result)
     return food_result, carbs_result, insuline_result
 
