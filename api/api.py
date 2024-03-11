@@ -1,8 +1,12 @@
 import streamlit as st
 import requests
+from PIL import Image
+import io
 
 # Define API endpoint
-url = 'https://carbotrackapi-qoz5nlx2ga-ew.a.run.app'
+api_urls = [
+    "https://carbotrackapi-qoz5nlx2ga-ew.a.run.app/predict"
+]
 
 # Define app title and description
 st.markdown("# Welcome to the Carbotrack app! #")
@@ -28,9 +32,9 @@ if uploaded_file is not None:
         with col2_2:  # Put the button in the middle sub-column
             if st.button("Let's try to detect food type and give you an insulin recommendation!", key='predict'):
                 if uploaded_file is not None:
-                    files = {'image': uploaded_file}
+                    files = {"image": (uploaded_file.name, buffer, "image/jpeg")}
                     with st.spinner('Trying to detect food type and give you an insulin recommendation!'):
-                        response = requests.post(url + '/predict', files=files)
+                        response = requests.post(url, files=files)
 
                     # Handle API response
                     if response.status_code == 200:
