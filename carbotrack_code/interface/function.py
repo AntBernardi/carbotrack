@@ -32,25 +32,20 @@ def get_carbs (food_result, image_path):
     response = requests.post(url, params=params, files=files, headers=headers)
     result_volume = round(response.json()['weight'],2)
 
-    # read data from database
-    df = pd.read_csv('raw_data/food1.csv')
-    mask = df['Category'] == food_result
-    df_result = df[mask]
+    # request from cyrill Api spoonacular
+    url_carbo = 'https://carbotrackv1-7xel7l3dia-ew.a.run.app/predict'
 
-    # Define the condition
-    condition = df_result['Data.Household Weights.1st Household Weight Description'] == '1 serving'
+    params_carbo = {'food_type': food_result, 'plate_diameter': '0'}
 
-    # Apply the condition using boolean indexing to filter rows where the condition is True
-    filtered_rows = df_result.loc[condition]
+    files = {'image': ('image24.jpeg', open(image_path, 'rb'), 'image/jpeg')}
+    headers = {
+        'accept': 'application/json',
+    }
+    response = requests.post(url_carbo, params=params_carbo, files=files, headers=headers)
+    result_carbo = round(response.json()['carbs_result'],2)
 
-    # If any rows satisfy the condition, return the value from the 'Data.Household Weights.1st Household Weight' column
-    if not filtered_rows.empty:
-        df_value = filtered_rows[['Data.Carbohydrate','Data.Household Weights.1st Household Weight']].iloc[0]
 
-    else:
-        df_value = df_result[['Data.Carbohydrate', 'Data.Household Weights.1st Household Weight']].mean()
-
-    carbs_result = round((result_volume * df_value['Data.Carbohydrate'])/df_value['Data.Household Weights.1st Household Weight'],2)
+    carbs_result = round((result_volume * result_carbo)/150,2)
 
     return carbs_result
 
@@ -58,7 +53,7 @@ def get_insuline(carbs_result):
     if pd.isnull(carbs_result):
         return None
     else:
-        return round(carbs_result / 15)
+        return round(carbs_result / 9)
 
 
 def safe_json(data):
@@ -85,7 +80,6 @@ def create_response(model,image_bytes):
         'insuline_result': insuline_result
     }
     return safe_json(data)
-
 
 
 if __name__ == '__main__':
