@@ -1,126 +1,49 @@
-import sys
-import os
-import uuid
+import streamlit as st
+import requests
 
+# Define API endpoint
+url = 'https://carbotrackapi-qoz5nlx2ga-ew.a.run.app'
 
-# Get the directory of the current file
-current_dir = os.path.dirname(os.path.realpath(__file__))
+# Define app title and description
+st.markdown("# Welcome to the Carbotrack app! #")
+st.markdown('''
+Please be aware that our app and our models are still at an early stage and may lack accuracy in food detection.
+**DO NOT** use this as medical guidance; always follow recommendations from your doctor.
+Please upload or take a picture to test our app and see how much insulin you should take based on the picture of your food.
+''')
 
-# Get the parent directory
-parent_dir = os.path.dirname(current_dir)
+# File upload section
+uploaded_file = st.file_uploader('Photo of your meal', type=['png', 'jpg', 'jpeg'], accept_multiple_files=False, help='Upload your photo')
 
-# Add the parent directory to sys.path
-sys.path.insert(0, parent_dir)
+# Process uploaded file
+if uploaded_file is not None:
+    col1, col2, col3 = st.columns([1,2,1])  # Create columns for layout
+    with col2:  # Display the uploaded image in the middle column
+        st.image(uploaded_file, width=340)
 
+    # Button for food detection and insulin recommendation
+    col1, col2, col3 = st.columns([1,2,1])  # Create columns for layout
+    with col2:  # Put the button in the middle column
+        col2_1, col2_2, col2_3 = st.columns([1,4,1])  # Create sub-columns within col2
+        with col2_2:  # Put the button in the middle sub-column
+            if st.button("Let's try to detect food type and give you an insulin recommendation!", key='predict'):
+                if uploaded_file is not None:
+                    files = {'image': uploaded_file}
+                    with st.spinner('Trying to detect food type and give you an insulin recommendation!'):
+                        response = requests.post(url + '/predict', files=files)
 
-from fastapi import FastAPI, UploadFile
-from fastapi.param_functions import File
-from fastapi.responses import JSONResponse
-from carbotrack_code.interface.function import get_full_result, create_response, safe_json
-from carbotrack_code.interface.function import get_food, get_carbs, get_insuline
-from fastapi.staticfiles import StaticFiles
-from PIL import Image
-import io
-import json
-from fastapi import FastAPI
-from carbotrack_code.interface.function import get_full_result
-from transformers import pipeline
+                    # Handle API response
+                    if response.status_code == 200:
+                        result = response.json()
+                        food_result = result.get('food_result', 'Unknown')
+                        carbs_result = result.get('carbs_result', 'Unknown')
+                        insulin_result = result.get('insulin_result', 'Unknown')
 
-model = pipeline("image-classification", model="nateraw/food",framework="pt")
-
-
-app = FastAPI()
-
-# Define a root `/` endpoint
-@app.get('/')
-def index():
-    return {'Hello': 'You'}
-
-# Serve files from the /images directory at the /images URL
-#app.mount("/images", StaticFiles(directory="images"), name="images")
-
-@app.post('/first_step')
-async def first_step(image: UploadFile = File(...)):
-    try:
-        if not image.content_type.startswith("image/"):
-            return JSONResponse(status_code=400, content={"error": "Invalid file type"})
-
-        filename = f"{uuid.uuid4()}.jpg"
-        image_path = filename
-
-        with open(image_path, 'wb') as buffer:
-            contents = await image.read()
-            buffer.write(contents)
-
-        food_result = get_food(model,image_path)
-
-        # Supprimez l'image après avoir terminé le traitement
-        if os.path.exists(image_path):
-            os.remove(image_path)
-
-        return {'You are eating': food_result}
-    except Exception as e:
-        return JSONResponse(status_code=500, content={"error": f"An error occurred: {e}"})
-
-@app.post('/get_carbs')
-async def get_carbs_endpoint(image: UploadFile = File(...)):
-    try:
-        if not image.content_type.startswith("image/"):
-            return JSONResponse(status_code=400, content={"error": "Invalid file type"})
-
-        filename = f"{uuid.uuid4()}.jpg"
-        image_path = filename
-
-        with open(image_path, 'wb') as buffer:
-            contents = await image.read()
-            buffer.write(contents)
-        food_result = get_food(model,image_path)
-        carbs_result = get_carbs(food_result,image_path)
-        return {
-            'You are eating': food_result,
-            'Carbohydrate content': carbs_result
-        }
-    except Exception as e:
-        return JSONResponse(status_code=500, content={"error": f"An error occurred: {e}"})
-
-@app.get('/get_carbs/{food_result}')
-async def get_carbs_endpoint(food_result: str):
-    carbs_result = get_carbs(food_result)
-    return {
-        'You are eating': food_result,
-        'Carbohydrate content': carbs_result
-    }
-
-
-@app.post('/predict')
-async def predict(image: UploadFile = File(...)):
-    try:
-
-        if not image.content_type.startswith("image/"):
-            return JSONResponse(status_code=400, content={"error": "Invalid file type"})
-
-        filename = f"{uuid.uuid4()}.jpg"
-        image_path = filename
-
-        with open(image_path, 'wb') as buffer:
-            contents = await image.read()
-            buffer.write(contents)
-
-        response = create_response(model,image_path)
-        response_json = json.loads(response)
-
-        # Truncate or limit the size of the response
-        if len(str(response_json)) > 1000:  # Change 1000 to the maximum size you want
-            response_json = str(response_json)[:1000]  # Truncate the response
-
-        return JSONResponse(status_code=200, content=response_json)
-    except Exception as e:
-        return JSONResponse(status_code=500, content={"error": f"An error occurred: {e}"})
-
-
-@app.get('/dummy_test')
-def dummy(int: int):
-    if int == 1:
-        return {'One'}
-    else:
-        return {'Please input 1 as parameter'}
+                        # Display results
+                        st.markdown(f"**Food detected:** {food_result} :drooling_face:")  
+                        st.markdown(f"**Estimated carbs:** {carbs_result:.2f} g")
+                        st.markdown(f"**Recommended insulin dose (not medical advice):** {insulin_result} dose")
+                    else:
+                        st.write("Food not recognized. Our model is still learning. We apologize!")
+                else:
+                    st.write("Please upload an image")
