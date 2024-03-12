@@ -10,6 +10,7 @@ __pycache__/
 notebooks/
 data/
 raw_data/
+models/
 
 # Distribution / packaging
 .Python
